@@ -127,3 +127,5 @@ WeekendFitData <- FitDataFixed %>%
 
 Weekendplot <- ggplot(WeekendFitData, aes(x=interval, y=steps)) +geom_line()+facet_grid(Weekend ~.)+ylab("Average Steps")+ggtitle("Average Steps by Interval - Weekend vs Weekday")
 Weekendplot
+
+
