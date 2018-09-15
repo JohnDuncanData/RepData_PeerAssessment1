@@ -1,25 +1,129 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+title: "Reproducible Research Assignment 1"
+output: html_document
 ---
 
+## Load and Preprocess the Data
 
-## Loading and preprocessing the data
+```{r}
 
+#load packages
+library(ggplot2)
+library(dplyr)
+library(zoo)
+library(data.table)
+# Create a temporary directory to store the file
 
+tf <- tempfile()
+td <- tempdir()
 
-## What is mean total number of steps taken per day?
+# Load the file
 
+zipData <- "https://github.com/JohnDuncanData/RepData_PeerAssessment1/raw/master/activity.zip"
 
+download.file(zipData, tf, mode="wb")
 
-## What is the average daily activity pattern?
+#Unzip the zip file
 
+FileNames <- unzip(tf, exdir=td)
 
+#read the file as a table
 
-## Imputing missing values
+FitData <- read.csv(FileNames[1])
 
+knitr::opts_chunk$set(echo = TRUE)
+```
 
+## What is the mean total number of steps taken per day?
 
-## Are there differences in activity patterns between weekdays and weekends?
+```{r}
+
+#Remove NA values and summarise days
+
+FitDatanoNA <- FitData[complete.cases(FitData), ]
+
+SumFitData <- FitDatanoNA %>%
+  group_by(date) %>%
+  summarise(steps=sum(steps))
+
+#create charts and summary statistics
+
+TotalStepHist <- ggplot(SumFitData, aes(x=steps)) + geom_histogram(binwidth = 2500) +ggtitle("Histogram of Total Steps per Day")
+TotalStepHist
+
+TotalStepsMean <- mean(SumFitData$steps)
+TotalStepsMean
+
+TotalStepsMedian <- median(SumFitData$steps)
+TotalStepsMedian
+
+```
+
+## What is the Average Daily Activity Pattern
+
+```{r}
+IntervalFitData <- FitDatanoNA %>%
+  group_by(interval) %>%
+  summarise(steps=mean(steps))
+
+IntervalTimeSeries <- ggplot(IntervalFitData, aes(x=interval, y=steps)) + geom_line() +ggtitle("Average Steps at each Interval")+ylab("Average Steps")
+
+IntervalFitDataRank<- IntervalFitData[order(-IntervalFitData$steps),]
+head(IntervalFitDataRank)
+TopInterval <- IntervalFitDataRank$interval[1]
+
+IntervalTimeSeries
+TopInterval
+
+```
+
+## Input Missing Values
+```{r}
+
+FitDataNA <- FitData[!complete.cases(FitData), ]
+NACount <- length(FitDataNA$steps)
+NACount
+
+# Replace NA with overall mean steps
+
+FitDataTB <- data.table(FitData)
+FitDataFixed <- FitDataTB[, steps := na.aggregate(steps)]
+
+SumFitDataFixed <- FitDataFixed %>%
+  group_by(date) %>%
+  summarise(steps=sum(steps))
+
+#create charts and summary statistics
+
+TotalStepHist <- ggplot(SumFitDataFixed, aes(x=steps)) + geom_histogram(binwidth = 2500) +ggtitle("Histogram of Total Steps per Day")
+TotalStepHist
+
+TotalStepsMean <- mean(SumFitDataFixed$steps)
+TotalStepsMean
+
+TotalStepsMedian <- median(SumFitDataFixed$steps)
+TotalStepsMedian
+
+# We can see that replacing the NA values with the average has shifted the median to equal the mean
+
+```
+
+## Are there differences in activity patterns on Weekdays and Weekends?
+
+```{r}
+
+FitDataFixed$date2 <- as.Date(FitDataFixed$date)
+Weekday <- weekdays(FitDataFixed$date2)
+
+FitDataFixed$Weekend <- with(FitDataFixed, ifelse(
+  Weekday == "Saturday", "Weekend", ifelse(
+    Weekday == "Sunday", "Weekend", "Weekday")
+)
+)
+
+WeekendFitData <- FitDataFixed %>%
+  group_by(interval,Weekend) %>%
+  summarise(steps=mean(steps))
+
+Weekendplot <- ggplot(WeekendFitData, aes(x=interval, y=steps)) +geom_line()+facet_grid(Weekend ~.)+ylab("Average Steps")+ggtitle("Average Steps by Interval - Weekend vs Weekday")
+Weekendplot
