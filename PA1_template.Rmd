@@ -5,7 +5,7 @@ output: html_document
 
 ## Load and Preprocess the Data
 
-```{r Pull_data}
+```{r Pull_data, results="asis"}
 
 #load packages
 library(ggplot2)
@@ -36,7 +36,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## What is the mean total number of steps taken per day?
 
-```{r Mean_steps}
+```{r Mean_steps, results="asis"}
 
 #Remove NA values and summarise days
 
@@ -61,7 +61,7 @@ TotalStepsMedian
 
 ## What is the Average Daily Activity Pattern
 
-```{r Avg_daily}
+```{r Avg_daily, results="asis"}
 IntervalFitData <- FitDatanoNA %>%
   group_by(interval) %>%
   summarise(steps=mean(steps))
@@ -78,7 +78,7 @@ TopInterval
 ```
 
 ## Input Missing Values
-```{r Input_missing}
+```{r Input_missing, results="asis"}
 
 FitDataNA <- FitData[!complete.cases(FitData), ]
 NACount <- length(FitDataNA$steps)
@@ -111,7 +111,7 @@ We can see that replacing the NA values with the average has shifted the median 
 
 ## Are there differences in activity patterns on Weekdays and Weekends?
 
-```{r Weekends_weekdays}
+```{r Weekends_weekdays, results="asis"}
 
 FitDataFixed$date2 <- as.Date(FitDataFixed$date)
 Weekday <- weekdays(FitDataFixed$date2)
