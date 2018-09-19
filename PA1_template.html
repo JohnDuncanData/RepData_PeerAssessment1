@@ -128,33 +128,11 @@ $(document).ready(function () {
 <div id="load-and-preprocess-the-data" class="section level2">
 <h2>Load and Preprocess the Data</h2>
 <pre class="r"><code>#load packages
-library(ggplot2)</code></pre>
-<pre><code>## Warning: package 'ggplot2' was built under R version 3.3.3</code></pre>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.3.3</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(zoo)</code></pre>
-<pre><code>## Warning: package 'zoo' was built under R version 3.3.3</code></pre>
-<pre><code>## 
-## Attaching package: 'zoo'</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     as.Date, as.Date.numeric</code></pre>
-<pre class="r"><code>library(data.table)</code></pre>
-<pre><code>## Warning: package 'data.table' was built under R version 3.3.3</code></pre>
-<pre><code>## 
-## Attaching package: 'data.table'</code></pre>
-<pre><code>## The following objects are masked from 'package:dplyr':
-## 
-##     between, first, last</code></pre>
-<pre class="r"><code># Create a temporary directory to store the file
+library(ggplot2)
+library(dplyr)
+library(zoo)
+library(data.table)
+# Create a temporary directory to store the file
 
 tf &lt;- tempfile()
 td &lt;- tempdir()
@@ -249,7 +227,7 @@ TotalStepsMean</code></pre>
 <pre class="r"><code>TotalStepsMedian &lt;- median(SumFitDataFixed$steps)
 TotalStepsMedian</code></pre>
 <pre><code>## [1] 10766.19</code></pre>
-<pre class="r"><code># We can see that replacing the NA values with the average has shifted the median to equal the mean</code></pre>
+<p>We can see that replacing the NA values with the average has shifted the median to equal the mean</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-on-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns on Weekdays and Weekends?</h2>
