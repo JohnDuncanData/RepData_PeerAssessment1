@@ -104,9 +104,10 @@ TotalStepsMean
 TotalStepsMedian <- median(SumFitDataFixed$steps)
 TotalStepsMedian
 
-# We can see that replacing the NA values with the average has shifted the median to equal the mean
+
 
 ```
+We can see that replacing the NA values with the average has shifted the median to equal the mean 
 
 ## Are there differences in activity patterns on Weekdays and Weekends?
 
